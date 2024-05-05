@@ -51,15 +51,15 @@ fun Application.servers() {
                         data class RegisterPacket(val port: Int)
 
                         val newServer = Server(call.request.origin.remoteAddress, Json.decodeFromString<RegisterPacket>(receivedText).port)
-                        pingHostImpl(newServer.address, newServer.port)
+                        if (pingHostImpl(newServer.address, newServer.port).modeName == "MultiPlayer") throw Exception("")
                         servers.add(newServer)
                         send("$newServer added")
                     } catch (e: Exception){
-                        Log.err(e)
+                        Log.err("Handle RegisterPacket err", e)
                     }
                 }
             } catch (e: Exception) {
-                println(e.localizedMessage)
+                Log.err("Websocket err", e)
             } finally {
                 servers.removeAll { it.address == call.request.origin.remoteAddress }
             }
