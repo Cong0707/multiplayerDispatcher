@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -10,6 +12,15 @@ plugins {
 
 group = "io.github.cong"
 version = "1.0.0"
+
+kotlin {
+    jvmToolchain(8)
+}
+tasks {
+    withType<KotlinCompile>().configureEach {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+}
 
 application {
     mainClass.set("io.github.cong.multiplayer.MultiplayerKt")
